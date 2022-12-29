@@ -1,46 +1,34 @@
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import Tasks from './components/Tasks'
 import AddTask from './components/AddTask'
 
 const App = () => {
    // DATA/STATE:
-  const [ tasks, setTasks ] = useState([
-    {
-        id: 1,
-        text: `Doctor's Appointment`,
-        day: `Feb 5th at 2:30pm`,
-        reminder: true
-    },
-    {
-        id: 2,
-        text: `School Meet`,
-        day: `Feb 6th at 3:30pm`,
-        reminder: false
-    },
-    {
-        id: 3,
-        text: `Grocery Shopping`,
-        day: `Feb 5th at 3:30pm`,
-        reminder: true
-    },  
-    {
-        id: 4,
-        text: `Date with Jasmine`,
-        day: `Feb 7th at 7:30pm`,
-        reminder: false
-    },
-    {
-        id: 5,
-        text: `Find a will to live`,
-        day: `Feb 8th at 1:10am`,
-        reminder: false
-    }
-  ])
+  const [ tasks, setTasks ] = useState([])
   const [showAddTask, setShowAddTask ] = useState(false)
 
  // METHODS: 
+    // Get data from API:
+useEffect(() => {
+  const getTasks = async () => {
+    const tasksFromSever = await fetchTasks()
+    setTasks(tasksFromSever)
+  }
+  getTasks()
+}, [] // dependency array
+)
+
+// fetch data from API
+const fetchTasks = async () => {
+  const res = await fetch('http://localhost:5002/tasks'),
+        data = await res.json()
+
+        // console.log('data', data)
+        return data
+}
+
     // Delete
   const deleteTask = (id) => {
     setTasks(tasks.filter((task) => task.id !== id))
