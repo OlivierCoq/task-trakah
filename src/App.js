@@ -1,8 +1,12 @@
 
 import { useState, useEffect } from 'react'
+import {BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+
 import Header from './components/Header'
 import Tasks from './components/Tasks'
 import AddTask from './components/AddTask'
+import Footer from './components/Footer'
+import About from './components/About'
 
 const App = () => {
    // DATA/STATE:
@@ -80,16 +84,29 @@ const fetchTask = async (id) => {
 
 // TEMPLATE: 
   return (
-    <div className="container">
-      <Header title="Task Trakah" toggleShowAddTask={() => setShowAddTask(!showAddTask)} showAdd={showAddTask} />
-      { // Shorthand for ternary:
-        showAddTask && <AddTask onAdd={addTask} />
-      }
-      { tasks.length > 0 ? 
-          <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder}  /> : 
-          'There are no tasks to show. Add one to get started!'
-      }
-    </div>
+    <Router>
+      <div className="container">
+        <Header title="Task Trakah" toggleShowAddTask={() => setShowAddTask(!showAddTask)} showAdd={showAddTask} />
+        
+        <Routes>
+          <Route path='/' element={
+            
+            <>
+              { // Shorthand for ternary:
+                showAddTask && <AddTask onAdd={addTask} />
+              }
+              { tasks.length > 0 ? 
+                  <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder}  /> : 
+                  'There are no tasks to show. Add one to get started!'
+              }
+            </>
+
+          } />
+          <Route path='/about' element={<About/>} /> 
+        </Routes> 
+        <Footer />
+      </div>
+    </Router>
   );
 } 
 
